@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src='https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css' rel='stylesheet' />
+    <link href='/map03.css' rel='stylesheet' />
+    <title>Third Map</title>
+</head>
+
+<body>
+    <div class="field-group">
+        <input id="name" type="text" name="name" id="name" class="input-field" placeholder="Escribe un nombre"
+            autocomplete="off" required>
+        <label for="name" class="input-label">Nombre</label>
+    </div>
+    <div class="field-group">
+        <input id="ubicacion" type="text" name="name" id="name" class="input-field" placeholder="Ubicacion"
+            autocomplete="off" required>
+        <label for="name" class="input-label">Ubicación</label>
+    </div>
+
+    <button id="btn" class="btn" type="submit">Registrar</button>
+    <div id="map"></div>
+    <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a
+        href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>
+    <script src="/map03.js" type="module"></script>
+</body>
+
+</html>
