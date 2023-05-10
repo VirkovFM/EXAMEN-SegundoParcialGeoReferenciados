@@ -13,7 +13,7 @@ let users = [];
 async function verMejorRuta(){
     const nameUserElement = document.getElementById("nameUser");
     
-    nameUserElement.textContent = name + " tu sucursal mas sercana es:";
+    nameUserElement.textContent = name + ", tu sucursal mas cercana es: ";
     
     try {
       const response = await fetch('http://127.0.0.1:4000/api/users/all');
@@ -77,7 +77,7 @@ function ordenar(usersSend){
 var mylatlng = { lat:21.15153969516301, lng: -101.71164537558829};
 var mapOptions = {
     center: mylatlng,
-    zoom: 7,
+    zoom: 8,
     mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 let map;
