@@ -24,7 +24,8 @@ btn.addEventListener('click', () => {
 */
         //window.location.href = "ruta";
         const encodedUbicacion = encodeURIComponent(ubicacion.value);
-        window.location.href = `ruta?ubicacion=${encodedUbicacion}`;
+        const encodedName = encodeURIComponent(name.value);
+        window.location.href = `ruta?ubicacion=${encodedUbicacion}&name=${encodedName}`;
     }
 });
 

@@ -1,5 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const ubicacion = urlParams.get('ubicacion');
+const name = urlParams.get('name');
 console.log(ubicacion)
 const userList = document.getElementById('users-list');
 //var numConsult = 0;
@@ -10,6 +11,10 @@ const userList = document.getElementById('users-list');
 let users = [];
 
 async function verMejorRuta(){
+    const nameUserElement = document.getElementById("nameUser");
+    
+    nameUserElement.textContent = name + " tu sucursal mas sercana es:";
+    
     fetch('http://127.0.0.1:4000/api/users/all')
     .then(response => response.json())
     .then(data => {
@@ -109,7 +114,7 @@ async function calcRoute(time, destino, nameBranch, numConsult){
         unitSystem: google.maps.UnitSystem.IMPRERIAL
     }
     //Pass the request to the route method
-    diretionsService.route(request, (result, status) =>{
+    diretionsService.route(request, async (result, status) =>{
         if (status == google.maps.DirectionsStatus.OK){
             time = result.routes[0].legs[0].duration.text
             //get distance and time
@@ -135,11 +140,14 @@ async function calcRoute(time, destino, nameBranch, numConsult){
         //console.log(time)
         //console.log(destino)
         users.push({destino, nameBranch, time});
-        console.log(numConsult)
-        console.log(numConsult == 6)
+        console.log(numConsult, numConsult == 6)
         if(numConsult == 6){
             const usersOrdenados = ordenar(users)
             console.log(usersOrdenados)
+            const nameSucursalElement = document.getElementById("nameSucursal");
+            nameSucursalElement.textContent = String(usersOrdenados[0].nameBranch)
+            await calcRoute(usersOrdenados[0].time, usersOrdenados[0].destino, usersOrdenados[0].nameBranch, 10)
+            console.log(usersOrdenados[0].destino)
             //const li = document.createElement('li');
             for (let i = 0; i < usersOrdenados.length; i++) {
                 const li = document.createElement('li');
@@ -152,6 +160,40 @@ async function calcRoute(time, destino, nameBranch, numConsult){
     });
 
     return '';
+}
+
+
+function calcRouteFianl(destino){
+    var request = {
+        origin: ubicacion,
+        destination: destino,
+        travelMode: google.maps.TravelMode.DRIVING, //WALKING, BYCYCLING AND TRANSIT
+        unitSystem: google.maps.UnitSystem.IMPRERIAL
+    }
+    //Pass the request to the route method
+    diretionsService.route(request, (result, status) =>{
+        if (status == google.maps.DirectionsStatus.OK){
+            //get distance and time
+            /*const output = document.querySelector('#output');
+            output.innerHTML = "<div class='alert-info'>From: " + 
+            document.getElementById("from").value +
+            ". <br />To: " + 
+            document.getElementById("to").value +
+            ". <br />Driving distance <i class='fas fa-road'></i> :" + 
+            result.routes[0].legs[0].distance.text +
+            ". <br />Duration <i class='fas fa-hourglass-start'></i> :" + 
+            result.routes[0].legs[0].duration.text +
+            ".</div>";
+            //display route
+            directionsDisplay.setDirections(result);*/
+        } else {
+            //delete the routes from map
+            directionsDisplay.setDirections({routes: []});
+            map.setCenter(mylatlng);
+            //show error message
+            output.innerHTML = "<div class='alert-danger'><i class='fas fa-exclamation-triangle-start'></i>Could not retrieve driving distance. </div>";
+        }
+    });
 }
 
 window.calcRoute = calcRoute
