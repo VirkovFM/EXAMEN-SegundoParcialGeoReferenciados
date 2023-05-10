@@ -3,7 +3,7 @@ const ubicacion = urlParams.get('ubicacion');
 const name = urlParams.get('name');
 console.log(ubicacion)
 const userList = document.getElementById('users-list');
-//var numConsult = 0;
+var numConsult = 0;
 //var time = 0;
 //var destino = ""
 //var nameBranch = ""
@@ -15,27 +15,22 @@ async function verMejorRuta(){
     
     nameUserElement.textContent = name + " tu sucursal mas sercana es:";
     
-    fetch('http://127.0.0.1:4000/api/users/all')
-    .then(response => response.json())
-    .then(data => {
-        var numConsult2 = 0
-        data.forEach(async user => {
-            var time = 0
-            var destino = ""
-            var nameBranch = ""
-            destino = user.manager_name;
-            nameBranch = user.name;
-            numConsult2++;
-            //console.log(`Destinations for user ${user.id}: ${destino}`);
-            await calcRoute(time, destino, nameBranch, numConsult2);
-            
-            //users.push({destino, nameBranch, time}); // Agregar los datos al arreglo
-        });
-        //users.sort((a, b) => a.time - b.time); // Ordenar los elementos del arreglo de menor a mayor
-        //console.log(users);
-    })
-    .catch(error => console.error(error));
-}
+    try {
+      const response = await fetch('http://127.0.0.1:4000/api/users/all');
+      const data = await response.json();
+      const promises = data.map(async user => {
+        const time = 0;
+        const destino = user.manager_name;
+        const nameBranch = user.name;
+        numConsult++;
+        await calcRoute(time, destino, nameBranch, numConsult);
+        console.log(user.manager_name)
+      });
+      await Promise.all(promises);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
 function ordenar(usersSend){
@@ -141,6 +136,7 @@ async function calcRoute(time, destino, nameBranch, numConsult){
         //console.log(destino)
         users.push({destino, nameBranch, time});
         console.log(numConsult, numConsult == 6)
+        await new Promise(resolve => setTimeout(resolve, 1000));
         if(numConsult == 6){
             const usersOrdenados = ordenar(users)
             console.log(usersOrdenados)
@@ -159,7 +155,7 @@ async function calcRoute(time, destino, nameBranch, numConsult){
         
     });
 
-    return '';
+    return ;
 }
 
 
